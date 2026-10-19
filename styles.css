@@ -1,0 +1,27 @@
+html {
+    font-size: 20px;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fdfdfd;
+}
+
+body > div {
+    display: grid;
+    grid-template-columns: repeat(6, 4rem);
+    grid-template-rows: repeat(7, 4rem);
+    grid-template-areas: "popen pclose exp mod arrows arrows"
+        "n7 n8 n9 multi arrows arrows"
+        "n4 n5 n6 div . ."
+        "n1 n2 n3 add del ."
+        "dot n0 eq sub clear ."
+}
+
+textarea {
+    text-align: end;
+    resize: none;
+    overflow: hidden;
+}
