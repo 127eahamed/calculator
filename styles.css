@@ -11,17 +11,101 @@ body {
 
 body > div {
     display: grid;
-    grid-template-columns: repeat(6, 4rem);
+    grid-template-columns: repeat(7, 4rem);
     grid-template-rows: repeat(7, 4rem);
-    grid-template-areas: "popen pclose exp mod arrows arrows"
-        "n7 n8 n9 multi arrows arrows"
-        "n4 n5 n6 div . ."
-        "n1 n2 n3 add del ."
-        "dot n0 eq sub clear ."
+    gap: 0.4rem;
+    grid-template-areas: "in in in in in in ."
+        "out out out out out out ."
+        "popen pclose exp mod arrows arrows arrows"
+        "n7 n8 n9 multi arrows arrows arrows"
+        "n4 n5 n6 div . . ."
+        "n1 n2 n3 add del . ."
+        "dot n0 eq min clear . ."
 }
 
-textarea {
+.button {
+    font-size: 1rem;
+    font-family: system-ui, sans-serif;
+    border: none;
+    border-radius: 0.4rem;
+    box-shadow: #ddd 0 2px 4px 1px;
+}
+#in, #out {
     text-align: end;
+    font-size: 1.2rem;
+    font-family: monospace;
+}
+#in {
+    grid-area: in;
     resize: none;
     overflow: hidden;
+}
+#out {
+    grid-area: out;
+}
+#popen {
+    grid-area: popen;
+}
+#pclose {
+    grid-area: pclose;
+}
+#exp {
+    grid-area: exp;
+}
+#mod {
+    grid-area: mod;
+}
+#multi {
+    grid-area: multi;
+}
+#div {
+    grid-area: div;
+}
+#add {
+    grid-area: add;
+}
+#del {
+    grid-area: del;
+}
+#dot {
+    grid-area: dot;
+}
+#eq {
+    grid-area: eq;
+}
+#min {
+    grid-area: min;
+}
+#clear {
+    grid-area: clear;
+}
+#n0 {
+    grid-area: n0;
+}
+#n1 {
+    grid-area: n1;
+}
+#n2 {
+    grid-area: n2;
+}
+#n3 {
+    grid-area: n3;
+}
+#n4 {
+    grid-area: n4;
+}
+#n5 {
+    grid-area: n5;
+}
+#n6 {
+    grid-area: n6;
+}
+#n7 {
+    grid-area: n7;
+}
+#n8 {
+    grid-area: n8;
+}
+#n9 {
+    grid-area: n9;
 }
