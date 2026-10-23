@@ -13,9 +13,9 @@ body > div {
     display: grid;
     grid-template-columns: repeat(7, 4rem);
     grid-template-rows: repeat(7, 4rem);
-    gap: 0.4rem;
-    grid-template-areas: "in in in in in in ."
-        "out out out out out out ."
+    gap: 0.6rem;
+    grid-template-areas: "txt txt txt txt txt txt ."
+        "txt txt txt txt txt txt ."
         "popen pclose exp mod arrows arrows arrows"
         "n7 n8 n9 multi arrows arrows arrows"
         "n4 n5 n6 div . . ."
@@ -24,21 +24,70 @@ body > div {
 }
 
 .button {
-    font-size: 1rem;
+    font-size: 1.4rem;
     font-family: system-ui, sans-serif;
     border: none;
-    border-radius: 0.4rem;
+    border-radius: 0.6rem;
     box-shadow: #ddd 0 2px 4px 1px;
+}
+.button.red-alt {
+    color: #B11C1C;
+}
+.button.red {
+    color: #ffffff;
+    background-color: #B13636;
+}
+.button.accent {
+    color: #ffffff;
+    background-color: #4551F0;
+}
+.button.with-small {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.small {
+    font-size: 0.8rem;
+}
+.txt {
+    grid-area: txt;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    padding-bottom: 1rem;
+}
+.txt > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: stretch;
 }
 #in, #out {
     text-align: end;
-    font-size: 1.2rem;
+    font-size: 1.8rem;
     font-family: monospace;
 }
 #in {
     grid-area: in;
     resize: none;
     overflow: hidden;
+}
+.arrows-container {
+    grid-area: arrows;
+}
+.arrows {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+.arrows-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+.arrows .button {
+    width: 3rem;
+    height: 3rem;
 }
 #out {
     grid-area: out;

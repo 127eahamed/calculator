@@ -1,30 +1,88 @@
-const textarea = document.getElementById("in");
+const inputEl = document.getElementById("in");
 const output = document.getElementById("out");
 let clearNext = false;
-document.getElementById("eq").addEventListener("click", () => {
-    let currentValue = textarea.value;
-    currentValue = currentValue.replaceAll("^", "**");
-    const result = eval(currentValue);
-    output.innerText += `\n= ${result}`;
-    clearNext = true;
-})
-
-function input(str) {
-    if (clearNext) {
-        output.innerText = "";
-        textarea.value = "";
-        clearNext = false;
+let history = [];
+let historyIndex = -1;
+if (window.sessionStorage) {
+    let savedHistory;
+    try {
+        savedHistory = JSON.parse(window.sessionStorage.getItem("history"));
+    } catch (err) {
+        console.error("Error getting/parsing history:", err);
     }
-    textarea.value = textarea.value += str;
+    if (savedHistory?.length != null) {
+        history = savedHistory;
+    }
 }
 
-textarea.addEventListener("focus", () => {
-    if (clearNext) {
-        output.innerText = "";
-        textarea.value = "";
-        clearNext = false;
+function calc() {
+    const ogValue = inputEl.innerHTML;
+    let currentValue = ogValue.replaceAll("^", "**");
+    let result = "ERROR";
+    const lettersRegex = /[a-zA-Z]/;
+    if (!lettersRegex.test(currentValue)) {
+        try {
+            result = eval(currentValue);
+        } catch (err) {
+            console.error("Invalid input:", err);
+        }
     }
-})
+    output.innerText = `= ${result}`;
+    clearNext = true;
+    history.push(ogValue);
+    if (window.sessionStorage) {
+        try {
+            sessionStorage.setItem("history", JSON.stringify(history));
+        } catch (err) {
+            console.error("Error saving history in sessionStorage:", err);
+        }
+    }
+}
+
+function clearIfNext() {
+    if (clearNext) {
+        clear();
+    }
+}
+
+function input(str) {
+    clearIfNext();
+    inputEl.innerHTML = inputEl.innerHTML += str;
+}
+
+function clear() {
+    output.innerText = "";
+    inputEl.innerHTML = "";
+    clearNext = false;
+}
+
+function backspace() {
+    clearIfNext();
+    inputEl.innerHTML = inputEl.innerHTML.substring(0, inputEl.innerHTML.length - 1);
+}
+
+function historyUp() {
+    if (historyIndex > 0) {
+        historyIndex--;
+    }
+    clear();
+    inputEl.innerHTML = history[historyIndex];
+}
+
+document.getElementById("eq").addEventListener("click", calc);
+document.getElementById("clear").addEventListener("click", clear);
+document.getElementById("del").addEventListener("click", backspace);
+
+window.addEventListener("keyup", event => {
+    const inputChars = "1234567890()^%*x/+-. ";
+    if (inputChars.includes(event.key)) {
+        input(event.key.replace("x", "*"));
+    } else if (event.key === "Enter" || event.key === "=") {
+        calc();
+    } else if (event.key === "Backspace") {
+        backspace();
+    }
+});
 
 document.getElementById("popen").addEventListener("click", () => input("("));
 document.getElementById("pclose").addEventListener("click", () => input(")"));

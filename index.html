@@ -8,12 +8,16 @@
 </head>
 <body>
     <div>
-        <textarea id="in" rows="2"></textarea>
-        <div id="out"></div>
+        <div class="txt">
+            <div>
+                <div id="in"></div>
+                <div id="out"></div>
+            </div>
+        </div>
         <button class="button" id="popen">(</button>
         <button class="button" id="pclose">)</button>
         <button class="button" id="exp">^</button>
-        <button class="button" id="mod"><span>%</span><span class="small">mod</span></button>
+        <button class="button with-small" id="mod"><span>%</span><span class="small">mod</span></button>
         <button class="button" id="n7">7</button>
         <button class="button" id="n8">8</button>
         <button class="button" id="n9">9</button>
@@ -28,10 +32,20 @@
         <button class="button" id="add">+</button>
         <button class="button" id="dot">.</button>
         <button class="button" id="n0">0</button>
-        <button class="button" id="eq">=</button>
+        <button class="button accent" id="eq">=</button>
         <button class="button" id="min">-</button>
-        <button class="button" id="del">DEL</button>
-        <button class="button" id="clear">C</button>
+        <button class="button red-alt" id="del">⌫</button>
+        <button class="button red" id="clear">C</button>
+        <div class="arrows-container">
+            <div class="arrows">
+                <button class="button">←</button>
+                <div class="arrows-column">
+                    <button class="button" id="up">↑</button>
+                    <button class="button" id="down">↓</button>
+                </div>
+                <button class="button">→</button>
+            </div>
+        </div>
     </div>
     <script src="index.js"></script>
 </body>
