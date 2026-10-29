@@ -14,11 +14,12 @@ if (window.sessionStorage) {
     }
     if (savedHistory?.length != null) {
         history = savedHistory;
-        historyIndex = savedHistory.length;
+        historyIndex = history.length;
     }
 }
 
 function calc() {
+    historyIndex = history.length;
     const ogValue = inputBeforeCur.innerText + inputAfterCur.innerText;
     let currentValue = ogValue.replaceAll("^", "**");
     let result = "ERROR";
