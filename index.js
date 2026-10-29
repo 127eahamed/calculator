@@ -1,4 +1,6 @@
-const inputEl = document.getElementById("in");
+const inputBeforeCur = document.getElementById("before-cursor");
+const inputAfterCur = document.getElementById("after-cursor");
+const cursor = document.getElementById("cursor");
 const output = document.getElementById("out");
 let clearNext = false;
 let history = [];
@@ -12,11 +14,12 @@ if (window.sessionStorage) {
     }
     if (savedHistory?.length != null) {
         history = savedHistory;
+        historyIndex = savedHistory.length;
     }
 }
 
 function calc() {
-    const ogValue = inputEl.innerHTML;
+    const ogValue = inputBeforeCur.innerText + inputAfterCur.innerText;
     let currentValue = ogValue.replaceAll("^", "**");
     let result = "ERROR";
     const lettersRegex = /[a-zA-Z]/;
@@ -24,11 +27,11 @@ function calc() {
         try {
             result = eval(currentValue);
         } catch (err) {
-            console.error("Invalid input:", err);
+            console.warn("Invalid input:", err);
         }
     }
     output.innerText = `= ${result}`;
-    clearNext = true;
+    setClearNext(true);
     history.push(ogValue);
     if (window.sessionStorage) {
         try {
@@ -42,23 +45,36 @@ function calc() {
 function clearIfNext() {
     if (clearNext) {
         clear();
+        cursor.classList.remove("hide");
+    }
+}
+function setClearNext(next) {
+    clearNext = next;
+    if (next) {
+        cursor.classList.add("hide");
+    } else {
+        cursor.classList.remove("hide");
     }
 }
 
 function input(str) {
     clearIfNext();
-    inputEl.innerHTML = inputEl.innerHTML += str;
+    inputBeforeCur.innerText += str;
+    cursor.scrollIntoView({
+        inline: "center"
+    })
 }
 
 function clear() {
     output.innerText = "";
-    inputEl.innerHTML = "";
-    clearNext = false;
+    inputBeforeCur.innerText = "";
+    inputAfterCur.innerText = "";
+    setClearNext(false);
 }
 
 function backspace() {
     clearIfNext();
-    inputEl.innerHTML = inputEl.innerHTML.substring(0, inputEl.innerHTML.length - 1);
+    inputBeforeCur.innerText = inputBeforeCur.innerText.substring(0, inputBeforeCur.innerText.length - 1);
 }
 
 function historyUp() {
@@ -66,21 +82,72 @@ function historyUp() {
         historyIndex--;
     }
     clear();
-    inputEl.innerHTML = history[historyIndex];
+    inputBeforeCur.innerText = history[historyIndex] ?? "";
 }
+function historyDown() {
+    if (historyIndex < history.length - 1) {
+        historyIndex++;
+    }
+    clear();
+    inputBeforeCur.innerText = history[historyIndex] ?? "";
+}
+function cursorLeft() {
+    if (inputBeforeCur.innerText.length > 0) {
+        const char = inputBeforeCur.innerText.substring(inputBeforeCur.innerText.length - 1);
+        inputBeforeCur.innerText = inputBeforeCur.innerText.substring(0, inputBeforeCur.innerText.length - 1);
+        inputAfterCur.innerText = char + inputAfterCur.innerText;
+    }
+    cursor.scrollIntoView({
+        inline: "center"
+    });
+}
+function cursorRight() {
+    if (inputAfterCur.innerText.length > 0) {
+        const char = inputAfterCur.innerText.substring(0, 1);
+        inputBeforeCur.innerText += char;
+        inputAfterCur.innerText = inputAfterCur.innerText.substring(1);
+    }
+    cursor.scrollIntoView({
+        inline: "center"
+    });
+}
+document.getElementById("up").addEventListener("click", historyUp);
+document.getElementById("down").addEventListener("click", historyDown);
+document.getElementById("left").addEventListener("click", cursorLeft);
+document.getElementById("right").addEventListener("click", cursorRight);
 
 document.getElementById("eq").addEventListener("click", calc);
 document.getElementById("clear").addEventListener("click", clear);
 document.getElementById("del").addEventListener("click", backspace);
 
-window.addEventListener("keyup", event => {
+window.addEventListener("keydown", event => {
     const inputChars = "1234567890()^%*x/+-. ";
     if (inputChars.includes(event.key)) {
         input(event.key.replace("x", "*"));
-    } else if (event.key === "Enter" || event.key === "=") {
-        calc();
+        event.preventDefault();
     } else if (event.key === "Backspace") {
         backspace();
+    } else if (event.key === "ArrowLeft") {
+        cursorLeft();
+        event.preventDefault();
+    } else if (event.key === "ArrowRight") {
+        cursorRight();
+        event.preventDefault();
+    } else if (event.key === "ArrowUp") {
+        historyUp();
+        event.preventDefault();
+    } else if (event.key === "ArrowDown") {
+        historyDown();
+        event.preventDefault();
+    }
+});
+window.addEventListener("keyup", event => {
+    if (event.key === "Enter" || event.key === "=") {
+        calc();
+    } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+    } else if (event.key === "ArrowRight") {
+        event.preventDefault();
     }
 });
 

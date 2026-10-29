@@ -29,17 +29,28 @@ body > div {
     border: none;
     border-radius: 0.6rem;
     box-shadow: #ddd 0 2px 4px 1px;
+    --bg-color: #f0f0f0;
+    background-color: var(--bg-color);
+    transition: background-color 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+.button:hover,
+.button:focus {
+    background-color: color-mix(in srgb, var(--bg-color) 90%, #000);
+}
+.button:active {
+    background-color: color-mix(in srgb, var(--bg-color) 75%, #000);
+    box-shadow: none;
 }
 .button.red-alt {
     color: #B11C1C;
 }
 .button.red {
     color: #ffffff;
-    background-color: #B13636;
+    --bg-color: #B13636;
 }
 .button.accent {
     color: #ffffff;
-    background-color: #4551F0;
+    --bg-color: #4551F0;
 }
 .button.with-small {
     display: flex;
@@ -55,6 +66,7 @@ body > div {
     flex-direction: column;
     justify-content: end;
     padding-bottom: 1rem;
+    overflow-x: auto;
 }
 .txt > div {
     display: flex;
@@ -70,6 +82,7 @@ body > div {
 #in {
     grid-area: in;
     resize: none;
+    text-wrap: nowrap;
     overflow: hidden;
 }
 .arrows-container {
@@ -89,6 +102,30 @@ body > div {
     width: 3rem;
     height: 3rem;
 }
+
+#cursor {
+    display: inline-block;
+    width: 0.2em;
+    height: 0.9em;
+    background-color: currentColor;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: ease-in-out;
+}
+@keyframes blink {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+#cursor.hide {
+    display: none;
+}
+
 #out {
     grid-area: out;
 }
