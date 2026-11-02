@@ -58,8 +58,14 @@ function setClearNext(next) {
     }
 }
 
-function input(str) {
-    clearIfNext();
+function input(str, appendIfNext) {
+    if (appendIfNext && clearNext && output.innerText.length > 2) {
+        const result = output.innerText.substring(2);
+        clear();
+        inputBeforeCur.innerText = result;
+    } else {
+        clearIfNext();
+    }
     inputBeforeCur.innerText += str;
     cursor.scrollIntoView({
         inline: "center"
@@ -122,9 +128,13 @@ document.getElementById("clear").addEventListener("click", clear);
 document.getElementById("del").addEventListener("click", backspace);
 
 window.addEventListener("keydown", event => {
-    const inputChars = "1234567890()^%*x/+-. ";
+    const inputChars = "1234567890(). ";
+    const inputOpChars = "^%*x/+-";
     if (inputChars.includes(event.key)) {
-        input(event.key.replace("x", "*"));
+        input(event.key);
+        event.preventDefault();
+    } else if (inputOpChars.includes(event.key)) {
+        input(event.key.replaceAll("x", "*"), true);
         event.preventDefault();
     } else if (event.key === "Backspace") {
         backspace();
@@ -154,13 +164,13 @@ window.addEventListener("keyup", event => {
 
 document.getElementById("popen").addEventListener("click", () => input("("));
 document.getElementById("pclose").addEventListener("click", () => input(")"));
-document.getElementById("exp").addEventListener("click", () => input("^"));
-document.getElementById("mod").addEventListener("click", () => input("%"));
-document.getElementById("multi").addEventListener("click", () => input("*"));
-document.getElementById("div").addEventListener("click", () => input("/"));
-document.getElementById("add").addEventListener("click", () => input("+"));
+document.getElementById("exp").addEventListener("click", () => input("^", true));
+document.getElementById("mod").addEventListener("click", () => input("%", true));
+document.getElementById("multi").addEventListener("click", () => input("*", true));
+document.getElementById("div").addEventListener("click", () => input("/", true));
+document.getElementById("add").addEventListener("click", () => input("+", true));
 document.getElementById("dot").addEventListener("click", () => input("."));
-document.getElementById("min").addEventListener("click", () => input("-"));
+document.getElementById("min").addEventListener("click", () => input("-", true));
 document.getElementById("n0").addEventListener("click", () => input("0"));
 document.getElementById("n1").addEventListener("click", () => input("1"));
 document.getElementById("n2").addEventListener("click", () => input("2"));
