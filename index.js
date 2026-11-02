@@ -19,7 +19,6 @@ if (window.sessionStorage) {
 }
 
 function calc() {
-    historyIndex = history.length;
     const ogValue = inputBeforeCur.innerText + inputAfterCur.innerText;
     let currentValue = ogValue.replaceAll("^", "**");
     let result = "ERROR";
@@ -34,6 +33,7 @@ function calc() {
     output.innerText = `= ${result}`;
     setClearNext(true);
     history.push(ogValue);
+    historyIndex = history.length;
     if (window.sessionStorage) {
         try {
             sessionStorage.setItem("history", JSON.stringify(history));
@@ -58,14 +58,8 @@ function setClearNext(next) {
     }
 }
 
-function input(str, appendIfNext) {
-    if (appendIfNext && clearNext && output.innerText.length > 2) {
-        const result = output.innerText.substring(2);
-        clear();
-        inputBeforeCur.innerText = result;
-    } else {
-        clearIfNext();
-    }
+function input(str) {
+    clearIfNext();
     inputBeforeCur.innerText += str;
     cursor.scrollIntoView({
         inline: "center"
@@ -99,6 +93,9 @@ function historyDown() {
     inputBeforeCur.innerText = history[historyIndex] ?? "";
 }
 function cursorLeft() {
+    if (clearNext) {
+        historyUp();
+    }
     if (inputBeforeCur.innerText.length > 0) {
         const char = inputBeforeCur.innerText.substring(inputBeforeCur.innerText.length - 1);
         inputBeforeCur.innerText = inputBeforeCur.innerText.substring(0, inputBeforeCur.innerText.length - 1);
@@ -109,6 +106,9 @@ function cursorLeft() {
     });
 }
 function cursorRight() {
+    if (clearNext) {
+        historyUp();
+    }
     if (inputAfterCur.innerText.length > 0) {
         const char = inputAfterCur.innerText.substring(0, 1);
         inputBeforeCur.innerText += char;
@@ -164,13 +164,13 @@ window.addEventListener("keyup", event => {
 
 document.getElementById("popen").addEventListener("click", () => input("("));
 document.getElementById("pclose").addEventListener("click", () => input(")"));
-document.getElementById("exp").addEventListener("click", () => input("^", true));
-document.getElementById("mod").addEventListener("click", () => input("%", true));
-document.getElementById("multi").addEventListener("click", () => input("*", true));
-document.getElementById("div").addEventListener("click", () => input("/", true));
-document.getElementById("add").addEventListener("click", () => input("+", true));
+document.getElementById("exp").addEventListener("click", () => input("^"));
+document.getElementById("mod").addEventListener("click", () => input("%"));
+document.getElementById("multi").addEventListener("click", () => input("*"));
+document.getElementById("div").addEventListener("click", () => input("/"));
+document.getElementById("add").addEventListener("click", () => input("+"));
 document.getElementById("dot").addEventListener("click", () => input("."));
-document.getElementById("min").addEventListener("click", () => input("-", true));
+document.getElementById("min").addEventListener("click", () => input("-"));
 document.getElementById("n0").addEventListener("click", () => input("0"));
 document.getElementById("n1").addEventListener("click", () => input("1"));
 document.getElementById("n2").addEventListener("click", () => input("2"));
