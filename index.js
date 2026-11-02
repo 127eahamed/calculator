@@ -128,13 +128,9 @@ document.getElementById("clear").addEventListener("click", clear);
 document.getElementById("del").addEventListener("click", backspace);
 
 window.addEventListener("keydown", event => {
-    const inputChars = "1234567890(). ";
-    const inputOpChars = "^%*x/+-";
+    const inputChars = "1234567890(). ^%*x/+-";
     if (inputChars.includes(event.key)) {
-        input(event.key);
-        event.preventDefault();
-    } else if (inputOpChars.includes(event.key)) {
-        input(event.key.replaceAll("x", "*"), true);
+        input(event.key.replaceAll("x", "*"));
         event.preventDefault();
     } else if (event.key === "Backspace") {
         backspace();
